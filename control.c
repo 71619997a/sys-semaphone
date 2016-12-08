@@ -38,7 +38,7 @@ main(int argc, char *argv[]) {
     int shmdesc = shmget(key, sizeof(int), IPC_CREAT | 0644);
     int semdesc = semget(key, 1, IPC_CREAT | 0644);
     if(mode == CREATE) {
-        int filedesc = creat("story", 0644);
+        close(creat("story", 0644));  // creat has correct flags
         int *linelen;
         shmat(shmdesc, linelen, 0);
         *linelen = 0;
