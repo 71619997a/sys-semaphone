@@ -1,10 +1,12 @@
+CC=gcc -g
+
 all: compile
 
-compile:
-	gcc -o control.out control.o
+compile: control.o
+	$(CC) -o control.out control.o
 
 control.o: control.c
-	gcc -c control.c
+	$(CC) -c control.c
 
 run: control.out
 	./control.out
