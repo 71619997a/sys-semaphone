@@ -21,11 +21,10 @@ const int CREATE = 0;
 const int REMOVE = 1;
 const int VIEW = 2;
 
-printFile(int fd) {
-    // TODO
+int printFile(int fd) {
 }
 
-main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     int mode = VIEW;  // default
     if(argc > 1) {
         if(!strcmp(argv[1], "-r")) {
@@ -48,7 +47,7 @@ main(int argc, char *argv[]) {
         printf("Initializing semaphore...\n");
         union semun msg;
         msg.val = 1;
-        semctl(semdesc, 0, IPC_SET, msg);
+        semctl(semdesc, 0, SETVAL, msg);
     } else if(mode == REMOVE){
         printf("Removing semaphore...\n");
         // Remove the shm and sem
