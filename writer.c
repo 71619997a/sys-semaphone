@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/sem.h>
@@ -29,12 +30,23 @@ int main() {
             lseek(filedesc, -(*linelen), SEEK_END);
             char *lastline = calloc(*linelen + 1, sizeof(char));
             read(filedesc, lastline, *linelen + 1);
-            lastline[*linelen] = '\0';
+            printf("len of lastline: %d\n", strlen(lastline));
             close(filedesc);  // done with reading from file
             printf("Last line:\n%s", lastline);
         } else {
+            // As *linelen includes the \n, it will only be 0 when there was no previously stored line:
             printf("Starting a new story\n");
         }
+        // Read a line and append it to the file:
+        char line[256];
+        fgets(line, 256, stdin);
+        int fd = open("story", O_APPEND | O_WRONLY);
+        write(fd, line, strlen(line));
+        printf("errno: %d. strified: %s. fd: %d\n", errno, strerror(errno), fd);
+        close(fd);
+        // Update shared memory segment:
+        *linelen = strlen(line);
+        shmdt(linelen);
     } else {
         printf("'story' file does not exist or we do not have permission to use it.\n");
     }
