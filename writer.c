@@ -12,7 +12,6 @@
 
 int main() {
     if (access("story", R_OK | W_OK) == 0) {
-
         int key = ftok("a_file", 7);
         // sem part
         int semdesc = semget(key, 1, IPC_CREAT | 0644);
@@ -37,6 +36,6 @@ int main() {
             printf("Starting a new story\n");
         }
     } else {
-        printf("'story' file does not exist.\n");
+        printf("'story' file does not exist or we do not have permission to use it.\n");
     }
 }
